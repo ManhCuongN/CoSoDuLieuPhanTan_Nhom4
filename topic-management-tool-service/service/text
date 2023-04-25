@@ -1,0 +1,131 @@
+ centerTransaction = true;
+    var {
+      idSubject,
+      title,
+      description,
+      filter,
+      limit,
+      numRequests,
+      numRegisters,
+      numMembers,
+      requiredSkills,
+      idGroup,
+    } = req.body;
+   
+
+    const createdBy = req.user._id;
+    const createdBy2 = req.user._id;
+    
+
+    let ready = false;
+    let readySQL = 0;
+    let confirm = false;
+    let confirmSQL = 0;
+    if (req.user.role == ROLE_DEAN) {
+      ready = true;
+      readySQL = 1
+      confirm = true;
+      confirmSQL = 1
+    } else if (req.user.role == ROLE_HD) {
+      ready = true;
+      readySQL = 1
+    }
+    const code = 'tf.1';
+    const code2 = 'tf.1';
+
+    // console.log(code);
+    var filterSQL;
+
+    //check
+     if(filter = '63ff19d49580679f95c666ea') {
+      filterSQL = "KHMT"
+    } else if (filter = '63ff19e59580679f95c666ef') {
+      filterSQL = "KTMT"
+    } else {
+      filterSQL = "Khac"
+    }
+    //connect
+   
+    // var db3 = await connectDB(server['KTMT']);
+
+     // Bắt đầu giao dịch trên database trung tâm
+        // Bắt đầu transaction trên server MCSR01    
+    // Kiểm tra kết quả
+    var sqlString = "SELECT * FROM DEPARTMENTS WHERE CODEDEPARTMENT = @filterSQL";
+     await db1.request()
+    .input("filterSQL", sql.NVarChar, filterSQL )
+    .query(sqlString, function(err, data){
+      if (data && data.recordset) {
+        var departmentServer = data.recordset[0].CODEDEPARTMENT;
+        console.log(err, data.recordset[0].CODEDEPARTMENT);
+      } else {
+        console.log('Data is undefined or null');
+      }
+    })
+    
+    
+
+    const insertSql = `INSERT INTO TOPICS (CODETOPIC, CODESUBJECT, TITLE, DESCRIPTION, REQUIREDSKILLS, READY, CONFIRM, CREATEDBY,
+      CODEINSTRUCTOR, FILTER, NUMBERREQUEST, NUMBERREGISTER, NUMBERMEMBERS, LIMIT, CODE)
+       VALUES (@code, @idSubject, @title, @description, @requiredSkills,@readySQL,
+       @confirmSQL, @createdBy, @createdBy2, @filterSQL, @numRequests, @numRegisters,
+        @numMembers, @limit, @code2);`
+    //  Tạo giao dịch phân tán và gửi yêu cầu đăng ký tín chỉ tới server khoa tương ứng
+    if(departmentServer = 'KHMT') {
+      //QUERY
+      await db2.transaction();
+      console.log('Transaction started on MCSR02')
+     await db2.request()
+		.input('code', sql.NVarChar, code)
+		.input('idSubject',sql.NVarChar, idSubject)
+		.input('title', sql.NVarChar, title)
+		.input('description', sql.NVarChar, description)
+		.input('requiredSkills',sql.NVarChar, requiredSkills)
+		.input('readySQL', sql.NVarChar,readySQL)
+		.input('confirmSQL', sql.Int,confirmSQL)
+		.input('createdBy', sql.NVarChar,createdBy)
+		.input('createdBy2', sql.NVarChar,createdBy2)
+		.input('filterSQL', sql.NVarChar,filterSQL)
+		.input('numRequests', sql.Int,numRequests)
+		.input('numRegisters', sql.Int,numRegisters)
+		.input('numMembers', sql.Int,numMembers)
+		.input('limit', sql.Int,limit)
+		.input('code2', sql.NVarChar,code2)
+
+      .query(insertSql, function(err, data){
+        console.log(err, data)
+      })
+
+      departmentTransaction = true;
+      db2Trans = true
+      
+    } else if (departmentServer = 'KTMT'){
+      // await db3.beginTransaction();
+      //  //QUERY
+      //  db3.query(sql,(err, result)  => {
+      //   if (err) {                       
+      //     console.error(err);
+      //   } else {
+      //     console.log(result);         
+      //    }
+      // });
+      // await db3.commit();
+      // departmentTransaction = true;
+      // db3Trans = true
+      
+    }
+    
+    // departmentTransaction = false;
+    // centerTransaction = false;
+    // db3Trans = false
+    // db2Trans = false
+    // //SQL
+
+    const sql = `UPDATE TOPICS SET TITLE = '${title}', 
+                  DESCRIPTION = '${description}', 
+                  REQUIREDSKILLS = '${requiredSkills}',
+                  FILTER = '${filterDepartment}',
+                  LIMIT = '${limit}',
+                  NUMREQUESTS = '${numRequests}',
+                  NUMMEMBERS = '${numMembers}' 
+                  

@@ -1,0 +1,45 @@
+{
+  "name": "topic-management-tool-service",
+  "version": "1.0.0",
+  "description": "**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha test/ut/**/*.js --recursive --timeout 60000 --exit",
+    "dev": "nodemon app.js",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://dhha-56@bitbucket.org/dacntt-2/topic-management-tool-service.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://bitbucket.org/dacntt-2/topic-management-tool-service/issues"
+  },
+  "homepage": "https://bitbucket.org/dacntt-2/topic-management-tool-service#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "chai": "^4.3.6",
+    "cors": "^2.8.5",
+    "cron": "^2.0.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.1",
+    "firebase-admin": "^11.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "mocha": "^10.0.0",
+    "mongoose": "^6.3.1",
+    "morgan": "^1.10.0",
+    "msnodesqlv8": "^3.0.1",
+    "mssql": "^9.1.1",
+    "multer": "*",
+    "passport": "^0.5.2",
+    "passport-jwt": "^4.0.0",
+    "passport-token-google": "^0.1.5",
+    "redis": "^4.6.5",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
